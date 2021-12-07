@@ -1,10 +1,19 @@
+import {useState} from "react";
+
 
 const App = () => {
-  const messages = ["hello world!", "olá mundo"];
+  const [message, setMessage] = useState('Hello world')
+
+
+  const handleChangeMessage = () => {
+    setMessage("olá mundo");
+    
+  }
   return (
-    <div>
-      {messages.map(message => <h1>{message}</h1>)}
-    </div>
+    <>
+      <h1>{message}</h1>
+      <button onClick={handleChangeMessage}>Change Message</button>
+    </>
   );
 }
 
