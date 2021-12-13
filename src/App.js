@@ -8,7 +8,7 @@ const App = () => {
   const [tasks, setTasks] = useState([
     {
       id: '1',
-      description: 'Study Javascript',
+      description: 'Study Elixir',
       isCompleted: false,
     },
     {
