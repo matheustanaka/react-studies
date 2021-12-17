@@ -1,54 +1,54 @@
-import {useState, useEffect} from "react";
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-import './Tasks.scss';
+import "./Tasks.scss";
 
-import TaskItem from './TaskItem'
-
+import TaskItem from "./TaskItem";
+import AddTask from "./AddTask";
 const Tasks = () => {
-    
-  const [tasks, setTasks] = useState([
+    const [tasks, setTasks] = useState([]);
 
-  ]);
+    const fetchTasks = async () => {
+        try {
+            const { data } = await axios.get("http://localhost:8000/tasks");
+            setTasks(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-  const fetchTasks = async () => {
-    try {
-      const { data } = await axios.get('http://localhost:8000/tasks')
-      setTasks(data)
-    } catch (error) {
-      console.log(error);
-    }
-  }
+    useEffect(() => {
+        fetchTasks();
+    }, []);
 
-  useEffect(() => {
-    fetchTasks();
-  }, [])
-
-    return(
+    return (
         <div className="tasks-container">
             <h2>Minhas Tarefas</h2>
 
             <div className="last-tasks">
-            <h3>Últimas Tarefas</h3>
+                <h3>Últimas Tarefas</h3>
+                <AddTask />
                 <div className="tasks-list">
-                    {tasks.filter(task => task.isCompleted === false)
-                    .map((lastTask) => (
-                    <TaskItem task={lastTask}/> 
-                    ))}
+                    {tasks
+                        .filter((task) => task.isCompleted === false)
+                        .map((lastTask) => (
+                            <TaskItem task={lastTask} />
+                        ))}
                 </div>
             </div>
 
             <div className="completed-tasks">
-            <h3>Tarefas Concluídas</h3>
+                <h3>Tarefas Concluídas</h3>
                 <div className="tasks-list">
-                    {tasks.filter((task) => task.isCompleted)
-                    .map((completedTask) => (
-                    <TaskItem task={completedTask}/> 
-                    ))}
+                    {tasks
+                        .filter((task) => task.isCompleted)
+                        .map((completedTask) => (
+                            <TaskItem task={completedTask} />
+                        ))}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Tasks;
