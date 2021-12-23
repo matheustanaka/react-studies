@@ -1,8 +1,43 @@
+import { AiFillDelete } from "react-icons/ai";
+import axios from "axios";
+import { useAlert } from "react-alert";
+
 import "./TaskItem.scss";
 
-import { AiFillDelete } from "react-icons/ai";
+const TaskItem = ({ task, fetchTasks }) => {
+    const alert = useAlert();
 
-const TaskItem = ({ task }) => {
+    const handleTaskDeletion = async () => {
+        try {
+            await axios.delete(
+                `${process.env.REACT_APP_API_URL}/tasks/${task._id}`
+            );
+
+            await fetchTasks();
+
+            alert.success("A tarefa foi removida com sucesso!");
+        } catch (_error) {
+            alert.error("Algo deu errado.");
+        }
+    };
+
+    const handleTaskCompletionChange = async (e) => {
+        try {
+            await axios.patch(
+                `${process.env.REACT_APP_API_URL}/tasks/${task._id}`,
+                {
+                    isCompleted: e.target.checked,
+                }
+            );
+
+            await fetchTasks();
+
+            alert.success("A tarefa foi modificada com sucesso!");
+        } catch (_error) {
+            alert.error("Algo deu errado.");
+        }
+    };
+
     return (
         <div className="task-item-container">
             <div className="task-description">
@@ -14,7 +49,11 @@ const TaskItem = ({ task }) => {
                     }
                 >
                     {task.description}
-                    <input type="checkbox" defaultChecked={task.isCompleted} />
+                    <input
+                        type="checkbox"
+                        defaultChecked={task.isCompleted}
+                        onChange={(e) => handleTaskCompletionChange(e)}
+                    />
                     <span
                         className={
                             task.isCompleted
@@ -26,7 +65,11 @@ const TaskItem = ({ task }) => {
             </div>
 
             <div className="delete">
-                <AiFillDelete size={18} color="#F97474" />
+                <AiFillDelete
+                    size={18}
+                    color="#F97474"
+                    onClick={handleTaskDeletion}
+                />
             </div>
         </div>
     );
