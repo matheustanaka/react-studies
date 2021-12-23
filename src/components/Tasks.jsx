@@ -5,12 +5,14 @@ import "./Tasks.scss";
 
 import TaskItem from "./TaskItem";
 import AddTask from "./AddTask";
+
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
 
     const fetchTasks = async () => {
         try {
             const { data } = await axios.get("http://localhost:8000/tasks");
+
             setTasks(data);
         } catch (error) {
             console.log(error);
